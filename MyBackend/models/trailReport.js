@@ -4,6 +4,10 @@ const sequelize = require('../database') // Importing the sequelize instance
 class TrailReport extends Model {}
 
 TrailReport.init({
+  username: {
+    type: DataTypes.TEXT, 
+    allowNull: false,
+  },
   trail_name: {
     type: DataTypes.STRING,
     allowNull: false,

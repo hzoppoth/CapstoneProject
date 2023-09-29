@@ -1,10 +1,11 @@
 const express = require('express');
-const sequelize = require('./database'); // Adjust the path accordingly
+const sequelize = require('./database'); 
 const reportRoutes = require('./routes/reportRoutes');
-
+const cors = require('cors');
 const app = express();
-app.use(express.json());
 
+app.use(express.json());
+app.use(cors());
 app.use('/report', reportRoutes);
 
 const PORT = process.env.PORT || 3000;
