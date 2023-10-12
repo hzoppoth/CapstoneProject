@@ -1,16 +1,6 @@
 const express = require('express');
 const TrailReport = require('../models/trailReport'); 
 const router = express.Router();
-
-router.get('/', async (req, res) => {
-    try {
-      const reports = await TrailReport.findAll();
-      res.json(reports);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Server Error');
-    }
-});
   
 router.post('/', async (req, res) => {
     try {
@@ -22,6 +12,56 @@ router.post('/', async (req, res) => {
       res.status(400).send('Bad Request');
     }
 });
+
+router.get('/trailnames', async (req, res) => {
+  try {
+      // Fetch unique trail names
+      const trailNames = await TrailReport.findAll({
+          attributes: ['trail_name'],
+          group: ['trail_name']
+      });
+
+      // Extract just the names
+      const names = trailNames.map(trail => trail.trail_name);
+      res.json(names);
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Server Error');
+  }
+});
+
+router.get('/reports', async (req, res) => {
+  const trailName = req.query.trailName;
+  if (!trailName) {
+      return res.status(400).send('Trail name is required.');
+  }
+  try {
+    const reports = await TrailReport.findAll({
+        where: {
+            trail_name: trailName
+        },
+        order: [
+            ['createdAt', 'DESC'] // This will order the reports by most recent. Ensure your TrailReport model timestamps are enabled.
+        ]
+    });
+    res.json(reports);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+  }
+});
+
+router.get('/', async (req, res) => {
+  try {
+    const reports = await TrailReport.findAll();
+    res.json(reports);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+  }
+});
+
+
 
 module.exports = router;
 

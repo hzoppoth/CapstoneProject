@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { CheckBox } from 'react-native-elements';
 import axios from 'axios';
-
-
 import styles from '../styles';
 
 function ReportIssue() {
@@ -13,9 +11,21 @@ function ReportIssue() {
   const [comments, setComments] = useState('');
   const [username, setUsername] = useState('');
   const [isUrgent, setIsUrgent] = useState(false);
+  const [trails, setTrails] = useState([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  
+  useEffect(() => {
+    async function fetchTrails() {
+      try {
+        const response = await axios.get('http://192.168.1.200:3000/report/trailnames');
+        setTrails(response.data);
+      } catch (error) {
+        console.error('Error fetching trail names:', error);
+      }
+    }
+
+    fetchTrails();
+  }, []);
 
   const submitReport = async () => {
     try {
@@ -59,24 +69,23 @@ function ReportIssue() {
       />
 
 
-      {/* Trail Picker */}
+      {/* Updated Trail Picker */}
       <View style={styles.pickerContainer}>
         <Picker
-        selectedValue={selectedTrail}
-        onValueChange={(itemValue, itemIndex) => {
-        if(itemIndex !== 0) { 
-            setSelectedTrail(itemValue);
-        }
-        }}
-        style={styles.picker}
-    >
-        <Picker.Item label="Select a trail" value="" />
-        <Picker.Item label="Greens Lick" value="Greens Lick" />
-        <Picker.Item label="Ingles Feild Gap" value="Ignles Feild Gap" />
-        <Picker.Item label="Wolf Creek" value="Wolf Creek" />
+          selectedValue={selectedTrail}
+          onValueChange={(itemValue, itemIndex) => {
+            if(itemIndex !== 0) { 
+              setSelectedTrail(itemValue);
+            }
+          }}
+          style={styles.picker}
+        >
+          <Picker.Item label="Select a trail" value="" />
+          {trails.map((trail, index) => (
+            <Picker.Item key={index} label={trail} value={trail} />
+          ))}
         </Picker>
-   
-        </View>
+      </View>
 
 
 

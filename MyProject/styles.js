@@ -100,6 +100,25 @@ const styles = StyleSheet.create({
     padding: 10, 
     marginBottom: 20,
   },
+  reportItem: {
+    padding: 10,
+    marginVertical: 5,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 8,
+  },
+  
+  reportText: {
+    color: 'white',
+    fontSize: 16,
+    marginBottom: 4,
+  },
+  
+  urgentText: {
+    color: 'red',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
   
 });
 
