@@ -41,7 +41,7 @@ router.get('/reports', async (req, res) => {
             trail_name: trailName
         },
         order: [
-            ['createdAt', 'DESC'] // This will order the reports by most recent. Ensure your TrailReport model timestamps are enabled.
+            ['createdAt', 'DESC'] 
         ]
     });
     res.json(reports);
